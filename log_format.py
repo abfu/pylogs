@@ -10,7 +10,7 @@ import logging
 root = logging.getLogger(__name__)
 
 handler = logging.StreamHandler()
-root.addHandler(loggi)
+root.addHandler(logg)
 
 logging.info('info')
 logging.warning('warn')

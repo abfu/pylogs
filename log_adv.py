@@ -9,7 +9,7 @@ BASIC_FORMAT = '%(levelname)s:%(name)s:%(message)s'
 
 
 # Formatter
-formatter = logging.Formatter(fmt='{asctime},{levelno},{levelname},{message}', style='{', datefmt='%H%M')
+formatter = logging.Formatter(fmt='{asctime},{levelno},{levelname},{message}', style='{', datefmt='%H:%M:%S')
 basic_format = logging.Formatter(fmt=BASIC_FORMAT)
 
 
