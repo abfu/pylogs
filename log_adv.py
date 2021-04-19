@@ -1,39 +1,37 @@
 import logging
 import sys
 import random
-import pandas as pd
+import datetime
 
-root = logging.getLogger(__name__)
 
-BASIC_FORMAT = '%(levelname)s:%(name)s:%(message)s'
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
+BASIC_FORMAT = '{levelname}:{name}:{message}'
+LOGFILE = f'{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}_logs.csv'
 
 # Formatter
-formatter = logging.Formatter(fmt='{asctime},{levelno},{levelname},{message}', style='{', datefmt='%H:%M:%S')
-basic_format = logging.Formatter(fmt=BASIC_FORMAT)
+csv_format = logging.Formatter(fmt='{asctime},{levelno},{name},{levelname},{message}', style='{', datefmt='%H:%M:%S')
+basic_format = logging.Formatter(fmt=BASIC_FORMAT, style='{')
 
 
 # Handlers
 handler_stderr = logging.StreamHandler(sys.stderr)
 handler_stderr.setFormatter(basic_format)
-
-handler_file = logging.FileHandler('logs.csv', mode='w')
-handler_file.setFormatter(formatter)
-
-root.addHandler(handler_file)
-root.addHandler(handler_stderr)
-
-levels = [f'root.{level}("{level} log message")' for level in ['debug', 'info', 'warning', 'error', 'critical']]
+handler_stderr.setLevel(logging.ERROR)
 
 
-def get_random_log():
+handler_file = logging.FileHandler(LOGFILE, mode='w')
+handler_file.setFormatter(csv_format)
+
+
+logger.addHandler(handler_file)
+logger.addHandler(handler_stderr)
+
+
+levels = [f'logger.{level}("{level} log message")' for level in ['debug', 'info', 'warning', 'error', 'critical']]
+
+
+def simulate_random_log_event():
     choice = random.choice(levels)
     eval(choice)
-
-
-###
-n_log_entries = 25
-for log_entry in range(0, n_log_entries):
-    get_random_log()
-
-df = pd.read_csv('logs.csv', names=['timestamp', 'levelno', 'levelname', 'message'], index_col=None)
